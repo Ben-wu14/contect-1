@@ -3,7 +3,7 @@ package contectCore;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FullList {
+public class FullList implements Save{
 	GroupList groupList;
 	ArrayList<Person> personList;
 	public FullList() {
@@ -30,5 +30,10 @@ public class FullList {
 	}
 	public void removePerson(Person person){
 		//TODO 删除联系人
+	}
+	@Override
+	public void saveInfor() {
+		// TODO 把内容保存至文本中
+		
 	}
 }

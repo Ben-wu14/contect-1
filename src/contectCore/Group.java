@@ -3,7 +3,7 @@ package contectCore;
 import java.awt.List;
 import java.util.ArrayList;
 
-public class Group {
+public class Group implements Save{
 	private ArrayList<Person>list;
 	private String listName;
 	public Group(String listName) {
@@ -41,5 +41,10 @@ public class Group {
 	}
 	public void deleteListOfPeople(List listOfpeople){
 		//TODO 把列表里的人全部从组里删除
+	}
+	@Override
+	public void saveInfor() {
+		// TODO 把内容保存至文本中
+		
 	}
 }

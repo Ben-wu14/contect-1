@@ -1,6 +1,6 @@
 package contectCore;
 
-public class Core {
+public class Core implements Save{
 	FullList fullList;
 	String path;
 	public Core() {
@@ -20,5 +20,10 @@ public class Core {
 	}
 	public void exportTovCard(){
 		//TODO 以vCard文件输出
+	}
+	@Override
+	public void saveInfor() {
+		// TODO 把内容保存至文本中
+		
 	}
 }
