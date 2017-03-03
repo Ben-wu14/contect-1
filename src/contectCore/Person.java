@@ -1,7 +1,7 @@
 package contectCore;
 
 import java.awt.List;
-import java.sql.Date;
+import java.util.Date;
 
 public class Person implements Save{
 	private String name;
