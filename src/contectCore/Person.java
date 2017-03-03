@@ -1,7 +1,6 @@
 package contectCore;
 
 import java.awt.List;
-import java.util.Date;
 
 public class Person implements Save{
 	private String name;
@@ -12,7 +11,7 @@ public class Person implements Save{
 	private String note;
 	private String address;
 	private String picture;
-	private Date birthday;
+	private Time birthday;
 	private String email;
 	private String instantContect;
 	//Constructor
@@ -69,10 +68,10 @@ public class Person implements Save{
 	public void setPicture(String picture) {
 		this.picture = picture;
 	}
-	public Date getBirthday() {
+	public Time getBirthday() {
 		return birthday;
 	}
-	public void setBirthday(Date birthday) {
+	public void setBirthday(Time birthday) {
 		this.birthday = birthday;
 	}
 	public String getEmail() {
