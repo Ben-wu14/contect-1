@@ -4,9 +4,15 @@ import java.awt.List;
 import java.util.ArrayList;
 
 public class GroupList implements Save{
-	ArrayList<Group> groups=new ArrayList<>();
+	private ArrayList<Group> groups;
 	public GroupList() {
 		// TODO Auto-generated constructor stub
+	}
+	public ArrayList<Group> getGroups() {
+		return groups;
+	}
+	public void setGroups(ArrayList<Group> groups) {
+		this.groups = groups;
 	}
 	public void newGroup(){
 	 // TODO 创建新的组到groups中	
