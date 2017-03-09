@@ -1,6 +1,6 @@
 package contectCore;
 
-import java.awt.List;
+import java.util.List;
 import java.util.ArrayList;
 
 public class GroupList implements Save{
@@ -14,13 +14,13 @@ public class GroupList implements Save{
 	public void setGroups(ArrayList<Group> groups) {
 		this.groups = groups;
 	}
-	public void newGroup(){
+	public void newGroup(Group group){
 	 // TODO 创建新的组到groups中	
 	}
 	public void removeGroup(Group delete){
 		//TODO 从groups中删除delete组别
 	}
-	public void removeListOfGroup(List list){
+	public void removeListOfGroup(List<Group> list){
 		//TODO 删除list中列出的所有组别
 	}
 	@Override
