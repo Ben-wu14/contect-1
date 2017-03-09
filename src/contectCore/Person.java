@@ -1,6 +1,5 @@
 package contectCore;
-
-import java.awt.List;
+import java.util.List;
 
 public class Person implements Save{
 	private String name;
@@ -87,7 +86,7 @@ public class Person implements Save{
 		this.instantContect = instantContect;
 	}
 	//把联系人加入列表ListOfGroup中所有组别中
-	public void addToGroups(List ListOfGroup){
+	public void addToGroups(List<Group> list){
 		
 	}
 	@Override
