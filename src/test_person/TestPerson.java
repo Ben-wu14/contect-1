@@ -1,4 +1,4 @@
-package testMain;
+package test_person;
 import contectCore.*;
 public class TestPerson {
 
