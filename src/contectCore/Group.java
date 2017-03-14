@@ -39,6 +39,9 @@ public class Group implements Save{
 	public void addListOfPeople(ArrayList<Person> listOfperson){
 		//TODO 把列表中的人全部加入到组里
 	}
+	public void addGroupOfPeople(Group group) {
+		//TODO 把已有组别内的联系人添加到现在的组别里面
+	}
 	public void deleteListOfPeople(ArrayList<Person> listOfpeople){
 		//TODO 把列表里的人全部从组里删除
 	}
