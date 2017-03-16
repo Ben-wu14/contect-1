@@ -35,6 +35,7 @@ public class Group implements Save{
 	}
 	public void deletePerson(Person deletePerson){
 		//TODO 从组别中删除联系人
+		list.remove(list.get(list.indexOf(deletePerson)));
 	}
 	public void addListOfPeople(ArrayList<Person> listOfperson){
 		//TODO 把列表中的人全部加入到组里
@@ -44,6 +45,7 @@ public class Group implements Save{
 	}
 	public void deleteListOfPeople(ArrayList<Person> listOfpeople){
 		//TODO 把列表里的人全部从组里删除
+		
 	}
 	@Override
 	public void saveInfor() {
