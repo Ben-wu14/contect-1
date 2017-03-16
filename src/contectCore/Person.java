@@ -87,7 +87,9 @@ public class Person implements Save{
 	}
 	//把联系人加入列表ListOfGroup中所有组别中
 	public void addToGroups(List<Group> list){
-		
+				for (Group group : list){
+					group.addPerson(this);
+				}
 	}
 	@Override
 	public void saveInfor() {
