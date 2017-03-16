@@ -45,7 +45,9 @@ public class Group implements Save{
 	}
 	public void deleteListOfPeople(ArrayList<Person> listOfpeople){
 		//TODO 把列表里的人全部从组里删除
-		
+		for (int i = 0; i < list.size(); i++) {
+			deletePerson(listOfpeople.get(i));
+		}
 	}
 	@Override
 	public void saveInfor() {
