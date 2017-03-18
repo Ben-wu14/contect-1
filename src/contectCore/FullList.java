@@ -58,10 +58,13 @@ public class FullList implements Save{
 	public void removePerson(Person person){
 		//TODO É¾³ýÁªÏµÈË
 		int pos = personList.indexOf(person);
-		personList.remove(pos);
-		for (int i = pointer+1; i < header.length; i++) {
-			header[i]--;
+		if(pos>=0){
+			personList.remove(pos);
+			for (int i = 0; i < header.length; i++) {
+				if(header[i]>pos)header[i]--;
+			}
 		}
+		
 	}
 	public int insertPlace(Person person){
 		char first=person.getPhoneticize().charAt(0);
