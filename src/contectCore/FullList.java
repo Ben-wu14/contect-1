@@ -3,6 +3,8 @@ package contectCore;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hp.hpl.sparta.xpath.PositionEqualsExpr;
+
 public class FullList implements Save{
 	GroupList groupList;
 	int[] header=new int[27];
@@ -28,9 +30,19 @@ public class FullList implements Save{
 	}
 	public void addNewPerson(Person person){
 		//TODO 添加新的联系人
+		int pos = insertPlace(person);
+		for (int i = 0; i < header.length; i++) {
+			if(header[i]>=pos)header[i]++;
+		}
+		personList.add(pos, person);
 	}
 	public void removePerson(Person person){
 		//TODO 删除联系人
+		int pos = personList.indexOf(person);
+		personList.remove(pos);
+		for (int i = 0; i < header.length; i++) {
+			if(header[i]>pos)header[i]--;
+		}
 	}
 	public int insertPlace(Person person){
 		char first=person.getPhoneticize().charAt(0);
