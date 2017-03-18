@@ -1,8 +1,11 @@
 package contectCore;
 import java.util.List;
 
+import net.sourceforge.pinyin4j.PinyinHelper;
+
 public class Person implements Save{
 	private String name;
+	private String phoneticize;
 	private String phoneNumber;
 	private String tel;
 	private String company;
@@ -17,6 +20,7 @@ public class Person implements Save{
 	public Person(String name) {
 		// TODO Auto-generated constructor stub
 		this.name=name;
+		setPhoneticize(operatePhoneticize(name));
 	}
 	//各项内容的get和set方法
 	public String getName() {
@@ -85,9 +89,40 @@ public class Person implements Save{
 	public void setInstantContect(String instantContect) {
 		this.instantContect = instantContect;
 	}
+	public String getPhoneticize() {
+		return phoneticize;
+	}
+	public void setPhoneticize(String phoneticize) {
+		this.phoneticize = phoneticize;
+	}
 	//把联系人加入列表ListOfGroup中所有组别中
 	public void addToGroups(List<Group> list){
-		
+				for (Group group : list){
+					group.addPerson(this);
+				}
+	}
+	public String operatePhoneticize(String name){
+		StringBuilder pyBuilder=new StringBuilder();
+		String temp=null;
+		for (int i = 0; i < name.length(); i++) {
+			temp=operateChar(name.charAt(i));
+			if(temp!=null){
+				pyBuilder.append(temp);
+			}else{
+				if (Character.isUpperCase(name.charAt(i))) {
+					pyBuilder.append(Character.toLowerCase(name.charAt(i)));
+				} else {
+					pyBuilder.append(name.charAt(i));
+				}
+				
+			}
+		}
+		return pyBuilder.toString();
+	}
+	public String operateChar(char c){
+		String[] pStrings=PinyinHelper.toHanyuPinyinStringArray(c);
+		if(pStrings==null)return null;
+		else return pStrings[0];
 	}
 	@Override
 	public void saveInfor() {
