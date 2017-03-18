@@ -5,7 +5,8 @@ import java.util.List;
 
 public class FullList implements Save{
 	GroupList groupList;
-	ArrayList<Person> personList;
+	int[] header=new int[27];
+	ArrayList<Person> personList = new ArrayList<>();
 	public FullList() {
 		// TODO Auto-generated constructor stub
 	}
@@ -30,6 +31,25 @@ public class FullList implements Save{
 	}
 	public void removePerson(Person person){
 		//TODO É¾³ýÁªÏµÈË
+	}
+	public int insertPlace(Person person){
+		char first=person.getPhoneticize().charAt(0);
+		String phoneticize=person.getPhoneticize();
+		boolean isLetter = Character.isLetter(first);
+		int index=26;
+		int endPos=personList.size();
+		if(isLetter){
+			first=Character.toLowerCase(first);
+			index=first-'a';
+			endPos=header[index+1];
+		}
+		int i;
+		for(i=header[index];i<endPos;i++){
+			if(person.getPhoneticize().compareTo(personList.get(i).getPhoneticize())>0){
+				break;
+			}
+		}
+		return i;
 	}
 	@Override
 	public void saveInfor() {
