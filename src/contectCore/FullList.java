@@ -8,7 +8,26 @@ import com.hp.hpl.sparta.xpath.PositionEqualsExpr;
 public class FullList implements Save{
 	GroupList groupList;
 	int[] header=new int[27];
+	int pointer=0;
 	ArrayList<Person> personList = new ArrayList<>();
+	public GroupList getGroupList() {
+		return groupList;
+	}
+	public void setGroupList(GroupList groupList) {
+		this.groupList = groupList;
+	}
+	public int[] getHeader() {
+		return header;
+	}
+	public void setHeader(int[] header) {
+		this.header = header;
+	}
+	public ArrayList<Person> getPersonList() {
+		return personList;
+	}
+	public void setPersonList(ArrayList<Person> personList) {
+		this.personList = personList;
+	}
 	public FullList() {
 		// TODO Auto-generated constructor stub
 	}
@@ -31,8 +50,8 @@ public class FullList implements Save{
 	public void addNewPerson(Person person){
 		//TODO 添加新的联系人
 		int pos = insertPlace(person);
-		for (int i = 0; i < header.length; i++) {
-			if(header[i]>=pos)header[i]++;
+		for (int i = pointer+1; i < header.length; i++) {
+			header[i]++;
 		}
 		personList.add(pos, person);
 	}
@@ -40,8 +59,8 @@ public class FullList implements Save{
 		//TODO 删除联系人
 		int pos = personList.indexOf(person);
 		personList.remove(pos);
-		for (int i = 0; i < header.length; i++) {
-			if(header[i]>pos)header[i]--;
+		for (int i = pointer+1; i < header.length; i++) {
+			header[i]--;
 		}
 	}
 	public int insertPlace(Person person){
@@ -55,9 +74,10 @@ public class FullList implements Save{
 			index=first-'a';
 			endPos=header[index+1];
 		}
+		pointer=index;
 		int i;
 		for(i=header[index];i<endPos;i++){
-			if(person.getPhoneticize().compareTo(personList.get(i).getPhoneticize())>0){
+			if(person.getPhoneticize().compareTo(personList.get(i).getPhoneticize())<0){
 				break;
 			}
 		}
