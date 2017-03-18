@@ -109,7 +109,12 @@ public class Person implements Save{
 			if(temp!=null){
 				pyBuilder.append(temp);
 			}else{
-				pyBuilder.append(name.charAt(i));
+				if (Character.isUpperCase(name.charAt(i))) {
+					pyBuilder.append(Character.toLowerCase(name.charAt(i)));
+				} else {
+					pyBuilder.append(name.charAt(i));
+				}
+				
 			}
 		}
 		return pyBuilder.toString();
