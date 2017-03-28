@@ -31,15 +31,20 @@ public class Group implements Save{
 	
 	
 	public void addPerson(Person newPerson){
+		list.add(newPerson);
 		//TODO 加入联系人到组别中
 	}
 	public void deletePerson(Person deletePerson){
 		//TODO 从组别中删除联系人
 	}
 	public void addListOfPeople(ArrayList<Person> listOfperson){
+		for (Person person : listOfperson)
+			list.add(person);
 		//TODO 把列表中的人全部加入到组里
 	}
 	public void addGroupOfPeople(Group group) {
+		for (Person person : group.list)
+			list.add(person);
 		//TODO 把已有组别内的联系人添加到现在的组别里面
 	}
 	public void deleteListOfPeople(ArrayList<Person> listOfpeople){
