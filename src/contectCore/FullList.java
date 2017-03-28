@@ -52,21 +52,24 @@ public class FullList implements Save{
 		int pos = insertPlace(person);
 		for (int i = pointer+1; i < header.length; i++) {
 			header[i]++;
+			//移动所有插入位置往后的指针
 		}
 		personList.add(pos, person);
 	}
 	public void removePerson(Person person){
 		//TODO 删除联系人
 		int pos = personList.indexOf(person);
-		if(pos>=0){
+		if(pos>=0){//如果存在对象
 			personList.remove(pos);
 			for (int i = 0; i < header.length; i++) {
-				if(header[i]>pos)header[i]--;
+				if(header[i]>pos)header[i]--;//修正删除插入位置往后的指针
 			}
 		}
 		
 	}
 	public int insertPlace(Person person){
+		//返回插入位置的后一个位
+		//更新pointer到插入的组别开头
 		char first=person.getPhoneticize().charAt(0);
 		String phoneticize=person.getPhoneticize();
 		boolean isLetter = Character.isLetter(first);

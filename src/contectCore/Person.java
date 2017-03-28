@@ -102,6 +102,7 @@ public class Person implements Save{
 				}
 	}
 	public String operatePhoneticize(String name){
+		//输入用户名字，输出汉语拼音（吴---wu2）,如果不是汉语，则不改变字符
 		StringBuilder pyBuilder=new StringBuilder();
 		String temp=null;
 		for (int i = 0; i < name.length(); i++) {
@@ -119,7 +120,8 @@ public class Person implements Save{
 		}
 		return pyBuilder.toString();
 	}
-	public String operateChar(char c){
+	private String operateChar(char c){
+		//单个字符转换，辅助operatePhoneticize的实现
 		String[] pStrings=PinyinHelper.toHanyuPinyinStringArray(c);
 		if(pStrings==null)return null;
 		else return pStrings[0];
