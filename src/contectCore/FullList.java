@@ -33,19 +33,47 @@ public class FullList implements Save{
 	}
 	public List<Person> searchByPhone(String phoneNumber){
 		//TODO 通过电话号码排列
-		return null;
+		List<Person> list = new ArrayList<>();
+		for (Person person : personList) {
+			int index=person.getPhoneNumber().indexOf(phoneNumber);
+			if(index!=-1){
+				list.add(person);
+			}
+		}
+		return list;
 	}
 	public List<Person> searchByTel(String tel){
 		//TODO 通过座机号码排列
-		return null;
+		List<Person> list = new ArrayList<>();
+		for (Person person : personList) {
+			int index=person.getTel().indexOf(tel);
+			if(index!=-1){
+				list.add(person);
+			}
+		}
+		return list;
 	}
 	public List<Person> searchByName(String Name){
 		//TODO 通过姓名进行排列
-		return null;
+		List<Person> list = new ArrayList<>();
+		for (Person person : personList) {
+			int index=person.getName().indexOf(Name);
+			if(index!=-1){
+				list.add(person);
+			}
+		}
+		return list;
 	}
 	public List<Person> searchByPhoneticize(String phoneticize){
 		//TODO 通过拼音排列，同时支持通过声母排列
-		return null;
+		List<Person> list = new ArrayList<>();
+		for (Person person : personList) {
+			int index=person.getPhoneticize().indexOf(phoneticize);
+			if(index!=-1){
+				list.add(person);
+			}
+		}
+		return list;
 	}
 	public void addNewPerson(Person person){
 		//TODO 添加新的联系人
