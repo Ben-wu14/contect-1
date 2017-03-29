@@ -35,8 +35,13 @@ public class FullList implements Save{
 		//TODO 通过电话号码排列
 		List<Person> list = new ArrayList<>();
 		for (Person person : personList) {
-			int index=person.getPhoneNumber().indexOf(phoneNumber);
-			index+=person.getTel().indexOf(phoneNumber);
+			int index=0;
+			if(person.getPhoneNumber()!=null){
+				index+=person.getPhoneNumber().indexOf(phoneNumber);
+			}else index+=-1;
+			if(person.getTel()!=null){
+				index+=person.getTel().indexOf(phoneNumber);
+			}else index+=-1;
 			if(index!=-2){
 				list.add(person);
 			}
@@ -59,7 +64,9 @@ public class FullList implements Save{
 		List<Person> list = new ArrayList<>();
 		for (Person person : personList) {
 			int index=person.getPhoneticize().indexOf(phoneticize);
-			if(index!=-1){
+			index+=person.getShortPontic().indexOf(phoneticize);
+			index+=person.getMidfPontic().indexOf(phoneticize);
+			if(index!=-3){
 				list.add(person);
 			}
 		}
