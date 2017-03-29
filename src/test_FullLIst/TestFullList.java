@@ -7,7 +7,9 @@ public class TestFullList {
 	public static void main(String[] args) {
 		FullList fullList = new FullList();
 		Person person1=new Person("ben");
+		person1.setTel("845687624");
 		Person person2=new Person("zeze");
+		person2.setTel("2456");
 		fullList.addNewPerson(person1);
 		fullList.addNewPerson(new Person("ten"));
 		fullList.addNewPerson(new Person("bill"));
@@ -21,15 +23,22 @@ public class TestFullList {
 		fullList.addNewPerson(person2);
 		fullList.addNewPerson(new Person("xj"));
 		fullList.addNewPerson(new Person("Œ‚ºŒ»Û"));
-		fullList.removePerson(person1);
-		fullList.removePerson(person2);
 		
 		for (Person person : fullList.getPersonList()) {
-			System.out.println(person.getName());
+			System.out.println(person.getName());//output the list of people
 		}
 		for (int person : fullList.getHeader()) {
-			System.out.println(person);
+			System.out.println(person);//get the header of each letter set
 		}
 		System.out.println(fullList.getPersonList().get(fullList.getHeader()[26]).getName());
+		for (Person person : fullList.searchByName("Œ‚")) {
+			System.out.println(person.getName());
+		}
+		for (Person person : fullList.searchByPhoneticize("wds")) {
+			System.out.println(person.getName());
+		}
+		for (Person person : fullList.searchByPhone("8456")) {
+			System.out.println(person.getName());
+		}
 	}
 }

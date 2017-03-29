@@ -18,6 +18,8 @@ public class TestPerson {
 		ben_ten.setInstantContect("phone");
 		System.out.println("Name: "+ben_ten.getName());
 		System.out.println("phoneticize: "+ben_ten.getPhoneticize());
+		System.out.println("short Phoneticize:"+ben_ten.getShortPontic());
+		System.out.println("Middle size Phoneticize"+ben_ten.getMidfPontic());
 		System.out.println("Phone:"+ben_ten.getPhoneNumber());
 		System.out.println("Tel:"+ben_ten.getTel());
 		System.out.println("Company"+ben_ten.getCompany());
