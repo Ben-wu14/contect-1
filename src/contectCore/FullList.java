@@ -36,18 +36,8 @@ public class FullList implements Save{
 		List<Person> list = new ArrayList<>();
 		for (Person person : personList) {
 			int index=person.getPhoneNumber().indexOf(phoneNumber);
-			if(index!=-1){
-				list.add(person);
-			}
-		}
-		return list;
-	}
-	public List<Person> searchByTel(String tel){
-		//TODO 通过座机号码排列
-		List<Person> list = new ArrayList<>();
-		for (Person person : personList) {
-			int index=person.getTel().indexOf(tel);
-			if(index!=-1){
+			index+=person.getTel().indexOf(phoneNumber);
+			if(index!=-2){
 				list.add(person);
 			}
 		}
