@@ -1,8 +1,10 @@
 package contectCore;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
@@ -14,6 +16,7 @@ import java.util.List;
 import ezvcard.*;
 import ezvcard.io.text.VCardReader;
 import ezvcard.parameter.Encoding;
+import ezvcard.parameter.ImageType;
 import ezvcard.parameter.TelephoneType;
 import ezvcard.property.Address;
 import ezvcard.property.Birthday;
@@ -84,10 +87,40 @@ public class Core implements Save{
 		    System.out.println();
 		    //get notes
 		    List<Photo>photos=vcard.getPhotos();
+		    int fileCount = 0;
 		    for (Photo photo : photos) {
 				//get the photo
+		    	 //the photo will have either a URL or a binary data
+		    	if (photo.getData() == null){
+		    	    System.out.println("Photo URL: " + photo.getUrl());
+		    	  } else {
+		    	    ImageType type = photo.getContentType();
+		    	     
+		    	    if (type == null) {
+		    	      //the vCard may not have any content type data associated with the photo
+		    	      System.out.println("Saving a photo file...");
+		    	    } else {
+		    	      System.out.println("Saving a \"" + type.getMediaType() + "\" file...");
+		    	    }
+		    	     
+		    	    String folder;
+		    	    if (type == ImageType.JPEG){ //it is safe to use "==" instead of "equals()"
+		    	      folder = "photos";
+		    	    } else {
+		    	      folder = "images";
+		    	    }
+		    	     
+		    	    byte data[] = photo.getData();
+		    	    String filename = name + fileCount;
+		    	    if (type != null && type.getExtension() != null){
+		    	       filename += "." + type.getExtension();
+		    	    }
+		    	    OutputStream out = new FileOutputStream(new File(folder, filename));
+		    	    out.write(data);
+		    	    out.close();
+		    	    fileCount++;
 			}
-		    
+		    }
 		    System.out.println();
 		  }
 		} finally {
