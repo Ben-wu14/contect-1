@@ -35,13 +35,23 @@ public class Person implements Save{
 		return phoneNumber;
 	}
 	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
+		String[] number=phoneNumber.split(" ");
+		String result="";
+		for (String string : number) {
+			result+=string;
+		}
+		this.phoneNumber = result;
 	}
 	public String getTel() {
 		return tel;
 	}
 	public void setTel(String tel) {
-		this.tel = tel;
+		String[] number=tel.split(" ");
+		String result="";
+		for (String string : number) {
+			result+=string;
+		}
+		this.tel = result;
 	}
 	public String getCompany() {
 		return company;
@@ -140,9 +150,9 @@ public class Person implements Save{
 				
 			}
 		}
-		shortPontic=stBuilder.toString();
-		phoneticize=pyBuilder.toString();
-		midfPontic=mdBuilder.toString();
+		this.shortPontic=stBuilder.toString();
+		this.phoneticize=pyBuilder.toString();
+		this.midfPontic=mdBuilder.toString();
 	}
 	private String operateChar(char c){
 		//单个字符转换，辅助operatePhoneticize的实现

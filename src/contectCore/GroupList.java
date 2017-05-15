@@ -16,7 +16,14 @@ public class GroupList implements Save{
 	}
 	public void newGroup(Group group){
 	 // TODO 创建新的组到groups中
-	      groups.add(group);
+		for (Group group1 : groups) {
+			if(group1.getListName().equals(group.getListName())){
+				groups.add(group);
+			}else{
+				System.out.println(" /n No Group or with Conflict name");
+			}
+		}
+	    
 	}
 	public void removeGroup(Group delete){
 		//TODO 从groups中删除delete组别
