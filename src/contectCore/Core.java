@@ -1,10 +1,19 @@
 package contectCore;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
@@ -13,9 +22,14 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import com.opencsv.CSVReader;
+import com.opencsv.CSVWriter;
 
 import ezvcard.*;
 import ezvcard.io.text.VCardReader;
@@ -29,6 +43,7 @@ import ezvcard.property.Address;
 import ezvcard.property.Birthday;
 import ezvcard.property.Email;
 import ezvcard.property.FormattedName;
+import ezvcard.property.Gender;
 import ezvcard.property.Impp;
 import ezvcard.property.Kind;
 import ezvcard.property.Member;
@@ -40,36 +55,102 @@ import ezvcard.property.Telephone;
 import ezvcard.util.*;
 
 public class Core implements Save{
-	public FullList fullList = new FullList();
+	public GroupList groupList = new GroupList();
+	public Group fulllist= groupList.getGroups().get(0);
 	String path;
 	public Core() {
 		// TODO Auto-generated constructor stub
 	}
-	public void importFromCSV(){
+	//导入导出地址path均为相对地址
+	public void importFromCSV(String path) throws IOException{
 		//TODO 通过CSV文件导入数据
+		File file = new File(path);
+		CSVReader csvReader = null;
+		DataInputStream in = new DataInputStream(new FileInputStream(file));
+		csvReader = new CSVReader(new InputStreamReader(in,"gbk"));
+		String [] nextLine;
+	     while ((nextLine = csvReader.readNext()) != null) {
+	        // nextLine[] is an array of values from the line
+	    	 Person person = new Person(nextLine[0]);
+	    	 
+	    	 try {
+	    		 person.setSex(nextLine[1]);
+	    		 person.setPhoneNumber(nextLine[3]);
+		    	 person.setTel(nextLine[4]);
+		    	 person.setCompany(nextLine[5]);
+		    	 person.setPostCode(nextLine[6]);
+		    	 person.setNote(nextLine[7]);
+		    	 person.setAddress(nextLine[8]);
+		    	 String birth = nextLine[9];
+		    	 String[]birtime= birth.split(",");
+		    	 if(!birth.equals("")&&birth!=null){
+		    		 person.setBirthday(new Time(Integer.parseInt(birtime[2]), Integer.parseInt(birtime[1]), Integer.parseInt(birtime[0])));
+		    	 }
+		    	 person.setEmail(nextLine[10]);
+		    	 person.setInstantContect(nextLine[11]);
+		    	 String[] strings=nextLine[12].split("/");
+		    	 ArrayList<String> liString=new ArrayList<>(Arrays.asList(nextLine[12].split("/")));
+		    	 if(liString.get(0).equals("")){
+		    		 liString.remove(0);
+		    	 }
+		    	 liString.add(0,"所有联系人");
+		    	 person.setGroups(liString);
+			} catch (ArrayIndexOutOfBoundsException e) {
+				// TODO: handle exception
+			}
+	    	 fulllist.addPerson(person);
+	     }
+	     csvReader.close();
+	     groupList.generateAllGroup();
+	     System.out.println("Finished inport csv in path: "+path);
 	}
 	public void importFromvCard(String path) throws IOException{
 		//TODO 通过vCard文件导入数据
 		File file = new File(path);
 		System.out.println(file.getAbsolutePath());
 		VCardReader reader = new VCardReader(file);
-		FullList list = new FullList();
 		try {
+		  ArrayList<Object> group=new ArrayList<>();
 		  VCard vcard;
 		  DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
 		  while ((vcard = reader.readNext()) != null) {
 			
-			  
-		    FormattedName fn = vcard.getFormattedName();
-		    String name = (fn == null) ? null : fn.getValue();
+			 ArrayList<String> strings=new ArrayList<>();
+			 FormattedName fn = vcard.getFormattedName();
+			 String name = (fn == null) ? null : fn.getValue();
+			 Kind kind = vcard.getKind();
+	    	
+	    	if (kind != null){
+	    	  if (kind.isGroup()){
+	    		 
+	  			System.out.println(kind.getGroup());
+	    	    System.out.println(name+"'s members are:");
+	    	   for (Member member : vcard.getMembers()){
+	    	     strings.add(member.getUri());
+	    	     System.out.print(" "+member.getUri());
+	    	     
+	    	    }
+	    	   group.add(strings);
+	    	   groupList.newGroup(name);
+		       continue;
+	    	  }
+	    	}
+	    	
 		    
-		    Person person=null;
 		    if(name!=null){
 		    	System.out.print(fn.getValue());
-		    	person = new Person(name);
-		    }
+		    	Person person = new Person(name);
+		    	//get the name 
+		    	Gender gender=vcard.getGender();
+		    	if(gender!=null){
+		    		if(gender.isMale()){
+		    			person.setSex("male");
+		    		}else if(gender.isFemale()){
+		    			person.setSex("female");
+		    		}
+		    	}
+		    	//get gender
 		    
-		    //get the name 
 		    
 		    Birthday bday = vcard.getBirthday();
 		    Date date = (bday == null) ? null : bday.getDate();
@@ -135,7 +216,15 @@ public class Core implements Save{
 		    if(organizations!=null)
 		    for (Organization organization : organizations) {
 		    	if(organization!=null){
-		    		person.setCompany(String.valueOf(organization.getValues()));
+		    		List<String> strings2=organization.getValues();
+		    		String result="";
+		    		for (String string : strings2) {
+						String temp=string.replace("[", "");
+						result+=temp.replace("]", "");
+					}
+		    		if(!result.equals(""))
+		    		person.setCompany(result);
+		    		
 		    	}
 				print(person.getCompany());
 			}
@@ -176,7 +265,7 @@ public class Core implements Save{
 		    	    } else {
 		    	      System.out.println("Saving a \"" + type.getMediaType() + "\" file...");
 		    	    }
-		    	     
+		    	    String bin="bin/";
 		    	    String folder;
 		    	    if (type == ImageType.JPEG){ //it is safe to use "==" instead of "equals()"
 		    	      folder = "photos";
@@ -189,7 +278,7 @@ public class Core implements Save{
 		    	    if (type != null && type.getExtension() != null){
 		    	       filename += "." + type.getExtension();
 		    	    }
-		    	    OutputStream out = new FileOutputStream(new File(folder, filename));
+		    	    OutputStream out = new FileOutputStream(new File(bin+folder, filename));
 		    	    out.write(data);
 		    	    out.close();
 		    	    fileCount++;
@@ -206,36 +295,40 @@ public class Core implements Save{
 		    	System.out.println();
 		    	
 		    	
-		    
-		    	Kind kind = vcard.getKind();
-		    	
-		    	if (kind != null){
-		    	  if (kind.isGroup()){
-		    	    System.out.println("The group's members are:");
-		    	    for (Member member : vcard.getMembers()){
-		    	      System.out.println(member.getUri());
-		    	    }
-		    	  }
-		    	}
-		    	
-		    List<Member> members=vcard.getMembers();
-		    if(members!=null)
-		    for (Member member : members) {
-		    	System.out.print(member.getValue());
-		    	list.groupList.newGroup(new Group(member.getValue()));
+		    fulllist.addPerson(person);
+		    }
+		  }
+		  if(group!=null){
+			  for (int i=0;i<group.size();i++) {
+				  ArrayList<String> nameList=(ArrayList<String>)group.get(i);
+				  for (String string : nameList) {
+					groupList.getGroups().get(i+1).addPerson(fulllist.findPersonByName(string));
+					//在fullist中找到对应的person加入到group中
+				}
 			}
-		    
-		    fullList.addNewPerson(person);
 		  }
 		} finally {
 		  reader.close();
+		  System.out.println("Finished import vcard in path: "+path);
 		}
 	}
-	public void importFromFile(){
+	public void importFromFile() throws IOException{
 		//TODO 通过文本文件导入数据
+		importFromvCard("original.vcf");
 	}
-	public void exportToCSV(){
+	public void exportToCSV(String path) throws IOException{
 		//TODO 以CSV文件输出
+		File file = new File(path);  
+		  
+	        
+	        DataOutputStream in = new DataOutputStream(new FileOutputStream(file));
+	        CSVWriter csvWriter = new CSVWriter(new OutputStreamWriter(in,"gbk"), ',');  
+	        for (Person person : fulllist.getList()) {
+	        String[] strs = person.stringlist();
+	        csvWriter.writeNext(strs);
+	        }
+	        csvWriter.close();
+	        System.out.println("Finished export csv in path: "+path);
 	}
 	public void exportTovCard(String path){
 		//TODO 以vCard文件输出
@@ -243,11 +336,22 @@ public class Core implements Save{
 		VCardWriter writer=null;
 		try {
 			 writer = new VCardWriter(file, VCardVersion.V3_0);
-		for (Person person : fullList.personList) {
+		for (Person person : fulllist.getList()) {
 			VCard vCard=  new VCard();
 			//name
 			vCard.setNickname(person.getName());
 			vCard.setFormattedName(person.getName());
+			//gender
+			if(person.getSex()!=null){
+				String sex=Gender.UNKNOWN;
+				if(person.getSex().equals("male")){
+					sex=Gender.MALE;
+				}else if(person.getSex().equals("female")){
+					sex=Gender.FEMALE;
+				}
+				RawProperty rawProperty = new RawProperty("GENDER",sex);
+				vCard.addProperty(rawProperty);
+			}
 			
 			//birthday
 			if(person.getBirthday()!=null){
@@ -268,11 +372,17 @@ public class Core implements Save{
 			}
 			if(person.getPhoneNumber()!=null){
 				Telephone telephone = new Telephone(person.getPhoneNumber());
-				telephone.getTypes().add(TelephoneType.HOME);
+				telephone.getTypes().add(TelephoneType.CELL);
 				vCard.addTelephoneNumber(telephone);
 			}
 			
 			//address&&post code
+			//-------------------------------
+			//test
+			//person.setPostCode("123432");
+			
+			//------------------------------
+			
 			if((person.getPostCode()!=null)||(person.getAddress()!=null)){
 				Address adr = new Address();
 				if((person.getAddress()!=null))
@@ -284,7 +394,7 @@ public class Core implements Save{
 			}
 			
 			//company
-			if(person.getCompany()!=null){
+			if(person.getCompany()!=null&&!person.getCompany().equals("")){
 				Organization org = new Organization();
 				org.getValues().add(person.getCompany());
 				vCard.setOrganization(org);
@@ -304,7 +414,7 @@ public class Core implements Save{
 			}
 			//photo
 			if(person.getPicture()!=null){
-				Path path2 = Paths.get(person.getPicture());
+				Path path2 = Paths.get("bin/"+person.getPicture());
 				byte[] data;
 				try {
 					data = Files.readAllBytes(path2);
@@ -322,15 +432,29 @@ public class Core implements Save{
 				vCard.addProperty(rawProperty);
 			}
 			//group
+			
 			writer.write(vCard);
 		}
-		
+		for (int i=0;i<groupList.getGroups().size()-1;i++) {
+			VCard vCard=  new VCard();
+			RawProperty rawProperty2 = new RawProperty("KIND","group");
+			vCard.addProperty(rawProperty2);
+			Group group=groupList.getGroups().get(i+1);
+			vCard.setFormattedName(group.getListName());
+			for (Person person : group.getList()) {
+				RawProperty rawProperty = new RawProperty("MEMBER",person.getName());
+				vCard.addProperty(rawProperty);
+			}
+			
+			writer.write(vCard);
+		}
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}finally {
 			  try {
 				writer.close();
+				System.out.println("Finished export vcard in path: "+path);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -340,7 +464,7 @@ public class Core implements Save{
 	@Override
 	public void saveInfor() {
 		// TODO 把内容保存至文本中
-		
+		exportTovCard("original.vcf");
 	}
 	public static<E> void print(E e){
 		System.out.print(e);

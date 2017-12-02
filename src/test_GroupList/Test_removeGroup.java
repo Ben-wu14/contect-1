@@ -21,17 +21,14 @@ public class Test_removeGroup {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		GroupList groupList = new GroupList();
-		Group group = new Group("1st Group");
-		Group group2 = new Group("2nd Group");
-		Group group3 = new Group("3rd Group");
-		groupList.newGroup(group);
-		groupList.newGroup(group2);
-		groupList.newGroup(group3);
+		groupList.newGroup("1st Group");
+		Group group2=groupList.newGroup("2nd Group");
+		groupList.newGroup("3rd Group");
 		printer(groupList);
 		
 		System.out.println();
 		
-		groupList.removeGroup(group2);
+		groupList.removeGroup("2nd Group");
 		printer(groupList);
 		
 	}

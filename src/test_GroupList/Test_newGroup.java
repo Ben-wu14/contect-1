@@ -13,10 +13,8 @@ import contectCore.*;
 public class Test_newGroup {
 	public static void main(String[] args) {
 		GroupList groupList = new GroupList();
-		Group group = new Group("1st Group");
-		Group group2 = new Group("2nd Group");
-		groupList.newGroup(group);
-		groupList.newGroup(group2);
+		groupList.newGroup("1st Group");
+		groupList.newGroup("2nd Group");
 	}
 	public static void printer(GroupList groupList){
 		for (Group group : groupList.getGroups()) {
